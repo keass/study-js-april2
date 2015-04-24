@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>study js 04</title>
+	<style>
+		.stage { position: relative; width:500px; height:200px; }
+		.obj1, .obj2 { displya:block; width:50px; height:50px;  }
+		.obj1 { background:red; float:left; }
+		.ing { background:#ccc;}
+		.obj2 { background:none; border:2px dotted #000; float:right;}
+		.obj2.over { padding:10px; }
+
+	</style>
+</head>
+<body>
+	<h1>Drag & Drop Component</h1>
+	<div class="stage">
+		<div class="obj1" draggable="true">aa</div> <!--draggalbe IE9~ SF6~ -->
+		<div class="obj2">bb</div>
+	</div>
+
+	<ul>
+	<li>마우스 인터랙션 이해</li>
+	<li>재사용 가능하도록..?</li>
+	<li>OOP?</li>
+	<li>참고 https://www.youtube.com/watch?v=EPCH1RByiRQ</li>
+	<li>1개의 드래그와 1개의 드랍 구조</li>
+	<li>드래그 대상이 드래그 중인 상태에서 마우스가 드롭영역에 올라갔을때 겹쳤다고 판단한다.</li>
+	<li>드래그 대상이 position:absolute, position:relative 상관없이 동작해야한다.</li>
+	<li>(추가) 여러개 드래그 > 1개 드랍으로도 되도록</li>
+	</ul>
+
+	<script src="js/script.js"></script>
+	</body>
+</html>
