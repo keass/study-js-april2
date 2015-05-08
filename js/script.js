@@ -16,12 +16,19 @@
 function Dragenv(a,b){
     this._init(a,b);
     this.mouse();
+
+
+
 }
 
 Dragenv.prototype = {
     _init:function(val1, val2) {
         this.dragStartItem = document.getElementsByClassName(val1);
         this.dragEndItem = document.getElementsByClassName(val2);
+    },
+    state:function(arg){
+        var state1 = document.getElementById('state');
+        state1.innerHTML = arg;
     },
     mouse:function(){
         var _self = this;
@@ -33,12 +40,16 @@ Dragenv.prototype = {
 
         document.addEventListener('mousemove',function(e){
             mouseMove = true;
-            var a  = e.clientY - (_self.dragStartItem[0].clientHeight/2) + "px";
-            var b  = e.clientX - (_self.dragStartItem[0].clientWidth/2) + "px";
-            //console.log('move');
-            //console.log(a,b);
-            if (mouseGrab){
+            //_self.state(mouseMove);
+            if (mouseDown){
+                mouseGrab = true;
+
+                var a  = e.clientY - (_self.dragStartItem[0].clientHeight/2) + "px";
+                var b  = e.clientX - (_self.dragStartItem[0].clientWidth/2) + "px";
+                var c = e.clientY;
+                var d = e.clientX;
                 _self.objectMove(a,b);
+                _self.destination(c,d);
             }
             //if (_self.oDouble) {
             //    _self.objectMove(e);
@@ -46,33 +57,58 @@ Dragenv.prototype = {
         });
         this.dragStartItem[0].addEventListener('mousedown', function(e){
             mouseDown = true;
-            //console.log(this);
-
             if(mouseMove) {
                 mouseGrab = true;
                 _self.objectDouble();
             }
 
         });
-        document.addEventListener('mouseup', function(){
-            var _self = this;
+        /*document.addEventListener('mouseup', function(){
+            if (mouseGrab && !mouseHover){
+                _self.oDouble.parentNode.removeChild(_self.oDouble);
+            }
             mouseDown = false;
+            mouseGrab = false;
+            _self.state(mouseGrab);
+            //x.parentNode.removeChild(x);
 
-        });
-        document.addEventListener('mousemove', function(){
-            mouseMove = true;
-            //console.log(mouseMove);
-        });
-        this.dragEndItem[0].addEventListener('mouseover',function(){
-           mouseHover = true;
+        });*/
+        document.addEventListener('mouseup', this.destination());
+        //document.addEventListener('mousemove', function(){
+        //    mouseMove = true;
+        //    //console.log(mouseMove);
+        //});
+
+        this.dragEndItem[0].addEventListener('mouseover',function(e){
+
+           // if (e.which == 1){
+           //     console.log(e.clientX, e.clientY);
+           //}
+           // console.log(this.offsetTop,this.offsetLeft);
+
+           // //console.log('올라왔어');
+           // if (mouseDown){
+           //    mouseHover = true;
+           //    console.log('grab > over');
+           //}
+
         });
 
     },
-    //mouseNow:function(){
-    //    document.addEventListener('mousemove',function(e){
-    //        console.log(e.clientX, e.clientY);
-    //    });
-    //},
+    mouseNow:function(){
+        document.addEventListener('mousemove',function(e){
+            console.log(e.clientX, e.clientY);
+        });
+    },
+    destination:function(c,d){
+        if (this.dragEndItem[0].offsetTop< c && c < this.dragEndItem[0].offsetTop+this.dragEndItem[0].clientHeight) {
+            if (this.dragEndItem[0].offsetLeft< d && d < this.dragEndItem[0].offsetLeft+this.dragEndItem[0].clientWidth) {
+                console.log(c,d);
+
+            }
+        }
+        //console.log(c,d);
+    },
     objectDouble:function(){
         //var oOriginal = this.dragStartItem[0];
         this.oDouble = this.dragStartItem[0].cloneNode(true);
@@ -81,17 +117,17 @@ Dragenv.prototype = {
         //console.log(a,top,b,left, this.dragStartItem[0], this.dragStartItem[0].clientHeight/2);
 
         //var style = "position:absolute; top:"+a+"; left:"+b+";";
-
         this.oDouble.setAttribute('style','display:none;');
-        document.body.appendChild(this.oDouble);
+        this.dragStartItem[0].parentNode.appendChild(this.oDouble);
     },
     objectMove:function(a,b){
         //var top = e.clientY - (this.oDouble.clientHeight/2) + "px";
         //var left = e.clientX - (this.oDouble.clientWidth/2) + "px";
-        var style = "position:absolute; top:"+a+"; left:"+b+";";
+        var style = "position:absolute; top:"+a+"; left:"+b+"; opacity:0.5; cursor:pointer;";
         //console.log(style);
         //console.log(this.oDouble);
         this.oDouble.setAttribute('style',style);
+        //this.mouseNow();
 
     }
 };
