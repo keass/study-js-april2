@@ -24,16 +24,73 @@ Dragenv.prototype = {
         this.dragEndItem = document.getElementsByClassName(val2);
     },
     mouse:function(){
-        //var _self = this;
-        this.dragStartItem[0].addEventListener('mousedown', function(){
+        var _self = this;
 
-            //console.log('오브젝트1 마우스다운');
+        var mouseDown = false;
+        var mouseMove = false;
+        var mouseGrab = false;
+        var mouseHover = false;
+
+        document.addEventListener('mousemove',function(e){
+            mouseMove = true;
+            //console.log('move');
+            //console.log(e.clientY);
+            if (mouseGrab){
+                _self.objectMove(e);
+            }
+            //if (_self.oDouble) {
+            //    _self.objectMove(e);
+            //}
+        });
+        this.dragStartItem[0].addEventListener('mousedown', function(e){
+            mouseDown = true;
+            if(mouseMove) {
+                mouseGrab = true;
+                _self.objectDouble(e);
+            }
+
+        });
+        document.addEventListener('mouseup', function(){
+            var _self = this;
+            mouseDown = false;
+
+        });
+        document.addEventListener('mousemove', function(){
+            mouseMove = true;
+            //console.log(mouseMove);
         });
         this.dragEndItem[0].addEventListener('mouseover',function(){
-           console.log('오브젝트2 마우스오버');
+           mouseHover = true;
         });
+
+    },
+    //mouseNow:function(){
+    //    document.addEventListener('mousemove',function(e){
+    //        console.log(e.clientX, e.clientY);
+    //    });
+    //},
+    objectDouble:function(e){
+        //var oOriginal = this.dragStartItem[0];
+        this.oDouble = this.dragStartItem[0].cloneNode(true);
+
+        var top = e.clientY - (this.oDouble.clientHeight/2) + "px";
+        var left = e.clientX - (this.oDouble.clientWidth/2) + "px";
+        var style = "position:absolute; top:"+top+"; left:"+left+";";
+
+        this.oDouble.setAttribute('style',style);
+        document.body.appendChild(this.oDouble);
+    },
+    objectMove:function(e){
+        var top = e.clientY - (this.oDouble.clientHeight/2) + "px";
+        var left = e.clientX - (this.oDouble.clientWidth/2) + "px";
+        var style = "position:absolute; top:"+top+"; left:"+left+";";
+
+        this.oDouble.setAttribute('style',style);
+
     }
 };
+
+
 /*
 var dragstart = function (){
     console.log('start');
