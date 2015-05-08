@@ -33,10 +33,12 @@ Dragenv.prototype = {
 
         document.addEventListener('mousemove',function(e){
             mouseMove = true;
+            var a  = e.clientY - (_self.dragStartItem[0].clientHeight/2) + "px";
+            var b  = e.clientX - (_self.dragStartItem[0].clientWidth/2) + "px";
             //console.log('move');
-            //console.log(e.clientY);
+            //console.log(a,b);
             if (mouseGrab){
-                _self.objectMove(e);
+                _self.objectMove(a,b);
             }
             //if (_self.oDouble) {
             //    _self.objectMove(e);
@@ -44,9 +46,11 @@ Dragenv.prototype = {
         });
         this.dragStartItem[0].addEventListener('mousedown', function(e){
             mouseDown = true;
+            //console.log(this);
+
             if(mouseMove) {
                 mouseGrab = true;
-                _self.objectDouble(e);
+                _self.objectDouble();
             }
 
         });
@@ -69,22 +73,24 @@ Dragenv.prototype = {
     //        console.log(e.clientX, e.clientY);
     //    });
     //},
-    objectDouble:function(e){
+    objectDouble:function(){
         //var oOriginal = this.dragStartItem[0];
         this.oDouble = this.dragStartItem[0].cloneNode(true);
+        //var top = a - (this.dragStartItem[0].clientHeight/2) + "px";
+        //var left  = b - (this.dragStartItem[0].clientWidth/2) + "px";
+        //console.log(a,top,b,left, this.dragStartItem[0], this.dragStartItem[0].clientHeight/2);
 
-        var top = e.clientY - (this.oDouble.clientHeight/2) + "px";
-        var left = e.clientX - (this.oDouble.clientWidth/2) + "px";
-        var style = "position:absolute; top:"+top+"; left:"+left+";";
+        //var style = "position:absolute; top:"+a+"; left:"+b+";";
 
-        this.oDouble.setAttribute('style',style);
+        this.oDouble.setAttribute('style','display:none;');
         document.body.appendChild(this.oDouble);
     },
-    objectMove:function(e){
-        var top = e.clientY - (this.oDouble.clientHeight/2) + "px";
-        var left = e.clientX - (this.oDouble.clientWidth/2) + "px";
-        var style = "position:absolute; top:"+top+"; left:"+left+";";
-
+    objectMove:function(a,b){
+        //var top = e.clientY - (this.oDouble.clientHeight/2) + "px";
+        //var left = e.clientX - (this.oDouble.clientWidth/2) + "px";
+        var style = "position:absolute; top:"+a+"; left:"+b+";";
+        //console.log(style);
+        //console.log(this.oDouble);
         this.oDouble.setAttribute('style',style);
 
     }
