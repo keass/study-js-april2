@@ -49,7 +49,7 @@ Dragenv.prototype = {
                 var c = e.clientY;
                 var d = e.clientX;
                 _self.objectMove(a,b);
-                _self.destination(c,d);
+                _self.dropCheker(c,d);
             }
             //if (_self.oDouble) {
             //    _self.objectMove(e);
@@ -63,36 +63,39 @@ Dragenv.prototype = {
             }
 
         });
-        /*document.addEventListener('mouseup', function(){
+        document.addEventListener('mouseup', function(e){
+            var c = e.clientY;
+            var d = e.clientX;
+
             if (mouseGrab && !mouseHover){
                 _self.oDouble.parentNode.removeChild(_self.oDouble);
             }
+
+            if(mouseGrab && _self.dropCheker(c,d)){
+                alert('drop');
+            }
             mouseDown = false;
             mouseGrab = false;
-            _self.state(mouseGrab);
-            //x.parentNode.removeChild(x);
+            //_self.state(mouseGrab);
 
-        });*/
-        document.addEventListener('mouseup', this.destination());
-        //document.addEventListener('mousemove', function(){
-        //    mouseMove = true;
-        //    //console.log(mouseMove);
-        //});
 
-        this.dragEndItem[0].addEventListener('mouseover',function(e){
-
-           // if (e.which == 1){
-           //     console.log(e.clientX, e.clientY);
-           //}
-           // console.log(this.offsetTop,this.offsetLeft);
-
-           // //console.log('올라왔어');
-           // if (mouseDown){
-           //    mouseHover = true;
-           //    console.log('grab > over');
-           //}
 
         });
+
+        //this.dragEndItem[0].addEventListener('mouseover',function(e){
+        //
+        //    if (e.which == 1){
+        //        console.log(e.clientX, e.clientY);
+        //   }
+        //    console.log(this.offsetTop,this.offsetLeft);
+        //
+        //    //console.log('올라왔어');
+        //    if (mouseDown){
+        //       mouseHover = true;
+        //       console.log('grab > over');
+        //   }
+        //
+        //});
 
     },
     mouseNow:function(){
@@ -100,15 +103,8 @@ Dragenv.prototype = {
             console.log(e.clientX, e.clientY);
         });
     },
-    destination:function(c,d){
-        if (this.dragEndItem[0].offsetTop< c && c < this.dragEndItem[0].offsetTop+this.dragEndItem[0].clientHeight) {
-            if (this.dragEndItem[0].offsetLeft< d && d < this.dragEndItem[0].offsetLeft+this.dragEndItem[0].clientWidth) {
-                console.log(c,d);
 
-            }
-        }
-        //console.log(c,d);
-    },
+
     objectDouble:function(){
         //var oOriginal = this.dragStartItem[0];
         this.oDouble = this.dragStartItem[0].cloneNode(true);
@@ -129,7 +125,17 @@ Dragenv.prototype = {
         this.oDouble.setAttribute('style',style);
         //this.mouseNow();
 
-    }
+    },
+    dropCheker:function(c,d){
+        if (this.dragEndItem[0].offsetTop< c && c < this.dragEndItem[0].offsetTop+this.dragEndItem[0].clientHeight) {
+            if (this.dragEndItem[0].offsetLeft< d && d < this.dragEndItem[0].offsetLeft+this.dragEndItem[0].clientWidth) {
+                return true;
+            }
+        }
+    },
+    dropACtion:function(){
+
+    },
 };
 
 
