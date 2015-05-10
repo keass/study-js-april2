@@ -101,5 +101,6 @@ Dragenv.prototype = {
 };
 
 var dragtest = new Dragenv('obj1','obj2');
+var dragtest2 = new Dragenv('obj1-2','obj2-2');
 
 
