@@ -8,7 +8,7 @@
 *   - //떼기전에 마우스를 옴기면 오브젝트가 따라붙는다
 *   - //떼면 사라진다
 *   - 끝으로 들어가 떼면 이벤트2
-* 드래그 끝을 정한다
+* 드래그 끝을 정한다ㄴ
 *   - 드래그가 시작되면 드래그엔드도 대비? 활성?
 *   - 드래그A가 영역내로 와서 떨어지면 이벤트 2
 * */
@@ -22,10 +22,23 @@ Dragenv.prototype = {
     _init:function(val1, val2) {
         this.dragStartItem = document.getElementsByClassName(val1);
         this.dragEndItem = document.getElementsByClassName(val2);
+
+        this.dragItem = [];
+        for (var i=0; i< this.dragStartItem.length; i++){
+            this.dragItem[i] = this.dragStartItem[i];
+        }
+        console.log(this.dragItem);
+        //console.log(this.dragStartItem);
+        //console.log(this.dragStartItem.length);
     },
     state:function(arg){
         var state1 = document.getElementById('state');
         state1.innerHTML = arg;
+    },
+    isMultiObject:function(){
+        if(this.dragStartItem[1]){
+            return true;
+        }
     },
     mouse:function(){
         var _self = this,
@@ -104,3 +117,16 @@ var dragtest = new Dragenv('obj1','obj2');
 var dragtest2 = new Dragenv('obj1-2','obj2-2');
 
 
+/*
+function test(a,b){
+    var dragStartItem = document.getElementsByClassName(a);
+    var dragItem = [];
+
+        for (var i=0; i< dragStartItem.length; i++){
+            dragItem[i] = dragStartItem[i];
+        }
+        console.log(dragItem);
+}
+test('obj1','obj2');
+test('obj1-2','obj2-2');
+*/
