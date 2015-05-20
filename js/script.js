@@ -15,19 +15,61 @@
 
 function Dragenv(a,b){
     this._init(a,b);
-    this.mouse();
-
+    this.mouse(a,b);
 }
-Dragenv.prototype = {
-    _init:function(val1, val2) {
-        this.dragStartItem = document.getElementsByClassName(val1);
-        this.dragEndItem = document.getElementsByClassName(val2);
 
-        this.dragItem = [];
-        for (var i=0; i< this.dragStartItem.length; i++){
-            this.dragItem[i] = this.dragStartItem[i];
+function MultiDragenv(a,b){
+    var testa = document.getElementsByClassName(a);
+    var testb = document.getElementsByClassName(b);
+    if (testa[1] || testb[1]){
+        for(var i =0; i<testa.length; i++){
+            for (var j =0; j<testb.length; j++){
+                new Dragenv(testa[i],testb[j]);
+                //console.log(testa[i],testb[j]);
+            }
         }
-        console.log(this.dragItem);
+    }
+}
+
+Dragenv.prototype = {
+    //itemStartArr:[],
+    //itemEndArr:[],
+    //newItemArr:[],
+    //_multi_init:function(val1,val2){
+    //    this.itemStartArr = document.getElementsByClassName(val1);
+    //    this.itemEndArr = document.getElementsByClassName(val2);
+    //    this.multiLancher();
+    //},
+    //multiLancher:function(){
+    //    var allArr = [];
+    //    for(var i=0; i<this.itemStartArr.length; i++){
+    //        for(var j=0; j<this.itemEndArr.length; j++) {
+    //            var a = this.itemStartArr[i];
+    //            var b = this.itemEndArr[j];
+    //            //console.log(a,b);
+    //            //console.log(new this._init(a,b));
+    //            this.mouse(a,b);
+    //
+    //            //this.newItemArr = new this._init(this.itemStartArr[i], this.itemEndArr[j]);
+    //            //console.log(this.newItemArr);
+    //        }
+    //    }
+    //
+    //},
+    //multichecker:function (a,b){
+    //    var testa = document.getElementsByClassName(a);
+    //    var testb = document.getElementsByClassName(b);
+    //    if (testa[1] || testb[1]){
+    //        console.log(testa.length);
+    //        console.log(testb.length);
+    //    }
+    //},
+    _init:function(val1, val2) {
+        this.dragStartItem = val1;
+        this.dragEndItem = val2;
+
+
+        //console.log(this.dragItem, this.dragStartItem);
         //console.log(this.dragStartItem);
         //console.log(this.dragStartItem.length);
     },
@@ -35,12 +77,14 @@ Dragenv.prototype = {
         var state1 = document.getElementById('state');
         state1.innerHTML = arg;
     },
-    isMultiObject:function(){
-        if(this.dragStartItem[1]){
-            return true;
-        }
-    },
-    mouse:function(){
+    //objGrab:this.dragStartItem[0],
+    //isMultiObject:function(){
+    //    if(this.dragStartItem[1]){
+    //        return true;
+    //    }
+    //},
+    mouse:function(a,b){
+        console.log(a,b);
         var _self = this,
             mouseDown = false,
             mouseMove = false,
@@ -52,22 +96,35 @@ Dragenv.prototype = {
             if (mouseDown){
                 mouseGrab = true;
 
-                var a  = e.clientY - (_self.dragStartItem[0].clientHeight/2) + "px";
-                var b  = e.clientX - (_self.dragStartItem[0].clientWidth/2) + "px";
+                var innera  = e.clientY - (a.clientHeight/2) + "px";
+                var innerb  = e.clientX - (a.clientWidth/2) + "px";
+                //console.log(a);
 
-                var c = e.clientY;
-                var d = e.clientX;
+                var innerc = e.clientY;
+                var innerd = e.clientX;
 
-                _self.objectMove(a,b);
-                _self.dropCheker(c,d);
+                _self.objectMove(innera,innerb);
+                _self.dropCheker(a,b,innerc,innerd);
+                //console.log(innera,innerc);
             }
         });
-        this.dragStartItem[0].addEventListener('mousedown', function(e){
+        //document.addEventListener('mousedown',function(e){
+        //    //console.log(e, "1");
+        //    for (var i = 0; i <_self.dragStartItem.length; i++){
+        //        console.log(e, _self.dragStratItem[i], "2");
+        //        _self.dragStartItem[i].addEventListener('mousedown',function(e){//console.log('hi', this)
+        //         });
+        //    }
+        //});
+
+        a.addEventListener('mousedown', function(e){
+            //console.log(this);
             mouseDown = true;
 
             if(mouseMove) {
                 mouseGrab = true;
-                _self.objectDouble();
+                _self.objectDouble(this);
+                //console.log(this);
             }
 
         });
@@ -79,7 +136,7 @@ Dragenv.prototype = {
                 _self.oDouble.parentNode.removeChild(_self.oDouble);
             }
 
-            if(mouseGrab && _self.dropCheker(c,d)){
+            if(mouseGrab && _self.dropCheker(a,b,c,d)){
                 _self.dropACtion();
             }
 
@@ -89,20 +146,22 @@ Dragenv.prototype = {
         });
     },
     // 드래그 시작하면 오브젝트 복제
-    objectDouble:function(){
-        this.oDouble = this.dragStartItem[0].cloneNode(true);
+    objectDouble:function(a){
+        this.oDouble = a.cloneNode(true);
+        //console.log(this.oDouble);
         this.oDouble.setAttribute('style','display:none;');
-        this.dragStartItem[0].parentNode.appendChild(this.oDouble);
+        a.parentNode.appendChild(this.oDouble);
     },
     // 드래그 포지션 top left 수치로 복제 오브젝트 마우스에 붙이기
-    objectMove:function(a,b){
-        var style = "position:absolute; top:"+a+"; left:"+b+"; opacity:0.5; cursor:pointer;";
+    objectMove:function(ina,inb){
+        var style = "position:absolute; top:"+ina+"; left:"+inb+"; opacity:0.5; cursor:pointer;";
         this.oDouble.setAttribute('style',style);
+        //console.log(style);
     },
     // 드랍 영역 들어왔는지 체크
-    dropCheker:function(c,d){
-        if (this.dragEndItem[0].offsetTop< c && c < this.dragEndItem[0].offsetTop+this.dragEndItem[0].clientHeight) {
-            if (this.dragEndItem[0].offsetLeft< d && d < this.dragEndItem[0].offsetLeft+this.dragEndItem[0].clientWidth) {
+    dropCheker:function(a,b,c,d){
+        if (b.offsetTop< c && c < b.offsetTop+b.clientHeight) {
+            if (b.offsetLeft< d && d < b.offsetLeft+b.clientWidth) {
                 return true;
             }
         }
@@ -113,8 +172,11 @@ Dragenv.prototype = {
     },
 };
 
-var dragtest = new Dragenv('obj1','obj2');
-var dragtest2 = new Dragenv('obj1-2','obj2-2');
+//var dragtest = new Dragenv('obj1','obj2');
+//var dragtest = new Dragenv('obj1','obj2');
+//var dragtest2 = new Dragenv('obj1-2','obj2-2');
+var dragtest3 = new MultiDragenv('obj1-2','obj2-2');
+//var dragtest4 = new MultiDragenv('obj1','obj2');
 
 
 /*
