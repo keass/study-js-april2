@@ -8,8 +8,11 @@
 		.obj1, .obj2, .obj1-2, .obj2-2 { display:block; width:50px; height:50px;  }
 		.obj1 { background:red; float:left; }
 		.obj1-2 { background:red; float:left; }
-		.blue { margin:10px 30px; background:blue; }
-		.green { margin: 30px 10px; background:green;}
+		.blue { margin:0 0 10px 10px; background:blue; }
+		.green { margin: 10px 0 30px 10px; background:green;}
+		.purple { margin: 50px 0 50px 10px; background:purple;}
+		.yellow { margin: 30px 0 100px 10px; background:yellow;}
+		.black { margin: 0 0 150px 10px; background:black;}
 
 		.ing { background:#ccc;}
 		.obj2 { background:none; border:2px dotted #000; float:right;}
@@ -26,9 +29,12 @@
 	</div>
 
 
-		<div class="obj1-2"></div>
+		<div class="obj1-2 red"></div>
 		<div class="obj1-2 green"></div>
 		<div class="obj1-2 blue"></div>
+		<div class="obj1-2 purple"></div>
+		<div class="obj1-2 yellow"></div>
+		<div class="obj1-2 black"></div>
 		<div class="obj2-2"></div>
 
 	<div id="state">
@@ -41,7 +47,7 @@
 	</div>
 -->
 
-	<ul>
+	<ul style="clear:both;">
 	<li>마우스 인터랙션 이해</li>
 	<li>재사용 가능하도록..?</li>
 	<li>OOP?</li>
