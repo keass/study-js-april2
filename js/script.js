@@ -28,6 +28,8 @@ function MultiDragenv(a,b){
                 //console.log(testa[i],testb[j]);
             }
         }
+    } else {
+        new Dragenv(testa[0],testb[0]);
     }
 }
 
@@ -96,16 +98,17 @@ Dragenv.prototype = {
             if (mouseDown){
                 mouseGrab = true;
 
-                var grabMoveY  = e.clientY - (a.clientHeight/2) + "px";
-                var grabMoveX  = e.clientX - (a.clientWidth/2) + "px";
+                var grabMoveY  = e.pageY - (a.clientHeight/2) + "px";
+                var grabMoveX  = e.pageX - (a.clientWidth/2) + "px";
                 //console.log(a);
 
-                var mouseNowY = e.clientY;
-                var mouseNowX = e.clientX;
+                var mouseNowY = e.pageY;
+                var mouseNowX = e.pageX;
+
 
                 _self.objectMove(grabMoveY,grabMoveX);
                 _self.dropCheker(grabMoveY,grabMoveX,mouseNowY,mouseNowX);
-                //console.log(grabMoveY,mouseNowY);
+                console.log(grabMoveY,mouseNowY);
             }
         });
         //document.addEventListener('mousedown',function(e){
@@ -170,10 +173,12 @@ Dragenv.prototype = {
     },
 };
 
-var dragtest = new Dragenv('obj1','obj2');
 //var dragtest = new Dragenv('obj1','obj2');
+
+var dragtest = new MultiDragenv('obj1','obj2');
+
 //var dragtest2 = new Dragenv('obj1-2','obj2-2');
-var dragtest3 = new MultiDradfgenv('obj1-2','obj2-2');
+var dragtest3 = new MultiDragenv('obj1-2','obj2-2');
 //var dragtest4 = new MultiDragenv('obj1','obj2');
 
 
