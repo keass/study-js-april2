@@ -14,7 +14,7 @@
 * */
 
 function Dragenv(a,b){
-    this._init(a,b);
+    //this._init(a,b);
     this.mouse(a,b);
 }
 
@@ -34,47 +34,10 @@ function MultiDragenv(a,b){
 }
 
 Dragenv.prototype = {
-    //itemStartArr:[],
-    //itemEndArr:[],
-    //newItemArr:[],
-    //_multi_init:function(val1,val2){
-    //    this.itemStartArr = document.getElementsByClassName(val1);
-    //    this.itemEndArr = document.getElementsByClassName(val2);
-    //    this.multiLancher();
+    //_init:function(val1, val2) {
+    //    this.dragStartItem = val1;
+    //    this.dragEndItem = val2;
     //},
-    //multiLancher:function(){
-    //    var allArr = [];
-    //    for(var i=0; i<this.itemStartArr.length; i++){
-    //        for(var j=0; j<this.itemEndArr.length; j++) {
-    //            var a = this.itemStartArr[i];
-    //            var b = this.itemEndArr[j];
-    //            //console.log(a,b);
-    //            //console.log(new this._init(a,b));
-    //            this.mouse(a,b);
-    //
-    //            //this.newItemArr = new this._init(this.itemStartArr[i], this.itemEndArr[j]);
-    //            //console.log(this.newItemArr);
-    //        }
-    //    }
-    //
-    //},
-    //multichecker:function (a,b){
-    //    var testa = document.getElementsByClassName(a);
-    //    var testb = document.getElementsByClassName(b);
-    //    if (testa[1] || testb[1]){
-    //        console.log(testa.length);
-    //        console.log(testb.length);
-    //    }
-    //},
-    _init:function(val1, val2) {
-        this.dragStartItem = val1;
-        this.dragEndItem = val2;
-
-
-        //console.log(this.dragItem, this.dragStartItem);
-        //console.log(this.dragStartItem);
-        //console.log(this.dragStartItem.length);
-    },
     state:function(arg){
         var state1 = document.getElementById('state');
         state1.innerHTML = arg;
@@ -86,7 +49,6 @@ Dragenv.prototype = {
     //    }
     //},
     mouse:function(a,b){
-        console.log(a,b);
         var _self = this,
             mouseDown = false,
             mouseMove = false,
@@ -98,28 +60,18 @@ Dragenv.prototype = {
             if (mouseDown){
                 mouseGrab = true;
 
-                var grabMoveY  = e.pageY - (a.clientHeight/2) + "px";
-                var grabMoveX  = e.pageX - (a.clientWidth/2) + "px";
-                //console.log(a);
+                var grabMoveY  = e.pageY - (a.clientHeight/2);
+                var grabMoveX  = e.pageX - (a.clientWidth/2);
+                //console.log(a.clientHeight, a.clientWidth);
 
                 var mouseNowY = e.pageY;
                 var mouseNowX = e.pageX;
 
-
                 _self.objectMove(grabMoveY,grabMoveX);
-                _self.dropCheker(grabMoveY,grabMoveX,mouseNowY,mouseNowX);
-                console.log(grabMoveY,mouseNowY);
+                _self.dropCheker(b,mouseNowY,mouseNowX);
+                //console.log(grabMoveY,grabMoveX,mouseNowY,mouseNowX);
             }
         });
-        //document.addEventListener('mousedown',function(e){
-        //    //console.log(e, "1");
-        //    for (var i = 0; i <_self.dragStartItem.length; i++){
-        //        console.log(e, _self.dragStratItem[i], "2");
-        //        _self.dragStartItem[i].addEventListener('mousedown',function(e){//console.log('hi', this)
-        //         });
-        //    }
-        //});
-
         a.addEventListener('mousedown', function(e){
             //console.log(this);
             mouseDown = true;
@@ -129,17 +81,16 @@ Dragenv.prototype = {
                 _self.objectDouble(this);
                 //console.log(this);
             }
-
         });
         document.addEventListener('mouseup', function(e){
-            var c = e.clientY,
-                d = e.clientX;
+            var c = e.pageY,
+                d = e.pageX;
 
             if (mouseGrab && !mouseHover){
                 _self.oDouble.parentNode.removeChild(_self.oDouble);
             }
-            if(mouseGrab && _self.dropCheker(a,b,c,d)){
-                console.log(a.getAttribute('class'));
+            if(mouseGrab && _self.dropCheker(b,c,d)){
+                //console.log(a.getAttribute('class'));
                 _self.dropACtion(a.getAttribute('class'));
             }
             mouseDown = false;
@@ -155,14 +106,15 @@ Dragenv.prototype = {
     },
     // 드래그 포지션 top left 수치로 복제 오브젝트 마우스에 붙이기
     objectMove:function(ina,inb){
-        var style = "position:absolute; top:"+ina+"; left:"+inb+"; opacity:0.5; margin:0; cursor:pointer;";
+        var style = "position:absolute; top:"+ina+"px; left:"+inb+"px; opacity:0.5; margin:0; cursor:pointer;";
         this.oDouble.setAttribute('style',style);
         //console.log(style);
     },
     // 드랍 영역 들어왔는지 체크
-    dropCheker:function(grabMoveY,grabMoveX,mouseNowY,mouseNowX){
-        if (grabMoveX.offsetLeft< mouseNowX && mouseNowX < grabMoveX.offsetLeft+grabMoveX.clientWidth) {
-            if (grabMoveY.offsetTop< mouseNowY && mouseNowY < grabMoveY.offsetTop+grabMoveY.clientHeight) {
+    dropCheker:function(b,mouseNowY,mouseNowX){
+        if (b.offsetLeft < mouseNowX && mouseNowX < b.offsetLeft+(b.clientWidth)) {
+            if (b.offsetTop < mouseNowY && mouseNowY < b.offsetTop+(b.clientHeight)) {
+                //console.log('ok');
                 return true;
             }
         }
